@@ -1,16 +1,20 @@
 # AutoLongRedditStories
 Automate those annoying AI-narrated Reddit stories with minecraft parkour in the background<br/>
 
-Disclaimer: this project is an experiment and is mostly vibe coded
+Disclaimer: this project is an experiment and has some AI-generated code
+
+
+# Todo priority
+- chattertesting -> chatter
+- speed up audio and srt
+- fix srt flickering
+- fix utf-8 error
 
 # TODO
 - some sort of welcome screen with a "generate topics or I already have an idea" choices
-- add tts generation to the loop
+- implement script generation
 - easy install script
 - thumbnail generator
-- captions generator
-- render final video
-- folder structure
 
 
 
@@ -23,8 +27,5 @@ Disclaimer: this project is an experiment and is mostly vibe coded
 
 
 # Usage Instructions
-1. Download or clone the repository
-2. Create a Python virtual environment (Tested on Python 3.11.9 and pip 21.2)
-3. Read SETUP_WINDOWS.md
-4. Install and start an Ollama server if you don't already have one
-5. Run main.py and answer the prompts
+1. Read the setup file for your operating system
+2. Run main.py and answer the prompts
