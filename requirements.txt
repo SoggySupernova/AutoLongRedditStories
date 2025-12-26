@@ -1,0 +1,3 @@
+requests
+chatterbox-tts
+moviepy==1.0.3
