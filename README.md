@@ -6,15 +6,15 @@ Disclaimer: this project is an experiment and has some AI-generated code
 
 # Todo priority
 - chattertesting -> chatter
-- speed up audio and srt
-- fix srt flickering
-- fix utf-8 error
+- fix utf-8 error (half done?)
+- add a clean up script (fix audio merging also adding files from previous generations)
 
 # TODO
 - some sort of welcome screen with a "generate topics or I already have an idea" choices
 - implement script generation
 - easy install script
 - thumbnail generator
+- write documentation
 
 
 
