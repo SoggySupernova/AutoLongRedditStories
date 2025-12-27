@@ -205,3 +205,8 @@ print("")
 
 
 subprocess.run(["ffmpeg", "-i", "temp/audio_added.mp4", "-y", "-vf", "subtitles=temp/output.ass:fontsdir=./input", "-c:a", "copy", "output/output.mp4"])
+
+
+print("")
+print("Finished!")
+print("Final video has been saved to output/output.mp4")

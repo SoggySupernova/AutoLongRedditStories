@@ -1,8 +1,8 @@
 # Prerequisites
 ---
-Tested on Python 3.11.9 and pip 23.0.1. Make sure you have the right version, this will save you many headaches!
+Tested on Python 3.10.0 and pip 23.0.1. If something breaks, try installing these specific versions!
 ---
-You need ffmpeg, ollama, and ImageMagick correctly installed and configured. You need to download a specific LLM as well:
+You need ffmpeg and ollama correctly installed and configured. You need to download a specific LLM as well:
 ```shell
 ollama pull ministral-3:8b-instruct-2512-q4_K_M
 ```
