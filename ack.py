@@ -105,6 +105,79 @@ def json_to_srt(
             f.write(f"{item['text']}\n\n")
 
 
-if __name__ == "__main__":
+json_to_srt(word_timestamps, "temp/output.srt", speed_multiplier=1.15) # so for some reason 1.1 doesn't work but 1.15 does???
 
-    json_to_srt(word_timestamps, "temp/output.srt", speed_multiplier=1.15) # so for some reason 1.1 doesn't work but 1.15 does???
+
+
+
+
+
+# convert srt to ass
+
+# truly an unfortunate acronym
+
+
+
+
+
+import sys
+import re
+from pathlib import Path
+
+
+ASS_HEADER = """[Script Info]
+ScriptType: v4.00+
+PlayResX: 1920
+PlayResY: 1080
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: Default,Montserrat-Bold,200,&H00FFFFFF,&H000000FF,&H00000000,&H00000000,0,0,0,0,100,100,0,0,1,3,0,5,0,0,0,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+"""
+
+
+def srt_time_to_ass(time_str: str) -> str:
+    h, m, rest = time_str.split(":")
+    s, ms = rest.split(",")
+    cs = int(ms) // 10  # centiseconds
+    return f"{int(h)}:{m}:{s}.{cs:02d}"
+
+
+def parse_srt(srt_text: str):
+    blocks = re.split(r"\n\s*\n", srt_text.strip())
+    for block in blocks:
+        lines = block.splitlines()
+        if len(lines) < 3:
+            continue
+
+        time_line = lines[1]
+        text_lines = lines[2:]
+
+        start, end = time_line.split(" --> ")
+        text = r"\N".join(text_lines)  # ASS newline
+
+        yield (
+            srt_time_to_ass(start.strip()),
+            srt_time_to_ass(end.strip()),
+            text
+        )
+
+
+def convert_srt_to_ass(input_path: Path, output_path: Path):
+    srt_text = input_path.read_text(encoding="utf-8")
+    events = []
+
+    for start, end, text in parse_srt(srt_text):
+        dialogue = (
+            f"Dialogue: 0,{start},{end},Default,,0,0,0,,{text}"
+        )
+        events.append(dialogue)
+
+    ass_content = ASS_HEADER + "\n".join(events) + "\n"
+    output_path.write_text(ass_content, encoding="utf-8")
+
+
+convert_srt_to_ass(Path("temp/output.srt"), Path("temp/output.ass"))

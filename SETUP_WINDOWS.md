@@ -53,12 +53,3 @@ pip install torch torchaudio
 
 
 
-aeneas does not work on Windows, so:
-# Installing aeneas through WSL
-Start menu -> search "Turn Windows features on and off" -> Turn on "Windows Subsystem for Linux"
-```bash
-wsl --install
-./setup_wsl.sh
-```
-
-

@@ -5,10 +5,8 @@ Disclaimer: this project is an experiment and has some AI-generated code
 
 
 # Todo priority
-- chattertesting -> chatter
 - fix utf-8 error (half done?)
 - add a clean up script (fix audio merging also adding files from previous generations)
-- remove aeneas
 
 # TODO
 - some sort of welcome screen with a "generate topics or I already have an idea" choices

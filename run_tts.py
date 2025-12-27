@@ -197,4 +197,11 @@ print("Rendering video...")
 print("This is the last step I promise")
 print("================================")
 print("")
-subprocess.run([sys.executable, "add_subtitles.py", "temp/audio_added.mp4", "temp/output.srt", "temp/subtitles_added.mp4"])
+
+
+
+# old slow method
+# subprocess.run([sys.executable, "add_subtitles.py", "temp/audio_added.mp4", "temp/output.srt", "temp/subtitles_added.mp4"])
+
+
+subprocess.run(["ffmpeg", "-i", "temp/audio_added.mp4", "-y", "-vf", "subtitles=temp/output.ass:fontsdir=./input", "-c:a", "copy", "output/output.mp4"])

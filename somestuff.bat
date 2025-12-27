@@ -1,1 +1,0 @@
-python add_subtitles.py temp/trimmed.mp4 temp/output.srt temp/subtitles_added.mp4
