@@ -21,16 +21,21 @@ alignment_model, alignment_tokenizer = load_alignment_model(
     dtype=torch.float16 if device == "cuda" else torch.float32,
 )
 
+
+print("Loading audio...")
 audio_waveform = load_audio(audio_path, alignment_model.dtype, alignment_model.device)
+print("Loaded")
 
 
 with open(text_path, "r") as f:
     lines = f.readlines()
 text = "".join(line for line in lines).replace("\n", " ").strip().replace("’","'") # Flatten smart quotes to fix encoding errors, will need to do more in the future
 
+print("Processing... This will take a while.")
 emissions, stride = generate_emissions(
     alignment_model, audio_waveform, batch_size=batch_size
 )
+
 
 tokens_starred, text_starred = preprocess_text(
     text,
@@ -38,11 +43,15 @@ tokens_starred, text_starred = preprocess_text(
     language=language,
 )
 
+
 segments, scores, blank_token = get_alignments(
     emissions,
     tokens_starred,
     alignment_tokenizer,
 )
+
+
+
 
 spans = get_spans(tokens_starred, segments, blank_token)
 
@@ -105,7 +114,7 @@ def json_to_srt(
             f.write(f"{item['text']}\n\n")
 
 
-json_to_srt(word_timestamps, "temp/output.srt", speed_multiplier=1.15) # so for some reason 1.1 doesn't work but 1.15 does???
+json_to_srt(word_timestamps, "temp/output.srt", speed_multiplier=1.1) # so for some reason 1.1 doesn't work but 1.15 does???
 
 
 

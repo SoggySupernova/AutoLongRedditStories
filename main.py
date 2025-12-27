@@ -1,86 +1,212 @@
-import requests
-import json
+print("")
+print("================================")
+print("Generating TTS...")
+print("================================")
+print("")
+print("Loading model...")
+from chatterbox.tts_turbo import ChatterboxTurboTTS
+import torchaudio as ta
+import torch
+import re
+import os
+from pydub import AudioSegment
+import subprocess
+import sys
 
-# System prompt for story generation
-story_system_prompt = """
-You are a long-form story generator. 
-Generate a coherent story segment of about 200 tokens.
-Do NOT include the summary in the story.
-Respond ONLY with the story continuation.
-"""
 
-# System prompt for summary update
-summary_system_prompt = """
-You are a story summarizer. 
-Based on the previous summary and the new story segment, update the summary to about 200 tokens.
-If there is no previous summary, just create a summary.
-The summary should include specific names, objects, and ideas, not general feelings, etc. The goal is to keep a separate story generator model from forgetting important details and losing continuity.
-Include only essential story details, character developments, plot progression, and unresolved threads.
-Do NOT include the full story.
-VERY IMPORTANT: DO NOT REPLACE IT WITH A SUMMARY OF THE NEW SEGMENT. ADD OR UPDATE INFORMATION.
-Respond ONLY with the summary.
-"""
+scriptfile = open("temp/allstory.txt","r")
+script = scriptfile.read()
+scriptfile.close()
 
-# Initial user prompt for story generation
-story_user_prompt = ""
-theme_sentence = """
-Opener: “My landlord texted, ‘Whatever you hear from apartment 3B tomorrow, you didn’t hear it.’”
-Plot: Strange sounds begin exactly at midnight, and the narrator uncovers a pattern tied to former tenants who all moved out within a week.
-"""
 
-# Initial empty summary
-summary = ""
 
-# Ollama API settings
-url = "http://localhost:11434/api/chat"
-options = {"num_gpu": -1, "num_ctx": 65536}
-model_name = "ministral-3:8b-instruct-2512-q4_K_M"
 
-def stream_ollama(system, user_prompt):
-    """Call Ollama API with streaming and return generated content"""
-    data = {
-        "model": model_name,
-        "messages": [
-            {"role": "system", "content": system},
-            {"role": "user", "content": user_prompt}
-        ],
-        "stream": True,
-        "options": options,
-        "keep_alive": 0
-    }
 
-    response = requests.post(url, json=data, stream=True)
-    result = ""
-    for line in response.iter_lines():
-        if line:
-            try:
-                resp = json.loads(line.decode('utf-8'))
-                content = resp.get("message", {}).get("content", "")
-                if content:
-                    print(content, end='', flush=True)
-                    result += content
-            except Exception:
-                continue
-    print("\n")  # separate each stream visually
-    return result
+def split_into_groups(text, min_words=10):
+    """
+    Split text into sentence groups where each group has at least `min_words`
+    words, and no group is longer than necessary.
+    """
+    # Basic sentence splitting (., ?, ! followed by whitespace)
+    sentences = re.split(r'(?<=[.!?])\s+', text.strip())
 
-# Run 10 rounds
-for round_number in range(1, 11):
-    print(f"--- ROUND {round_number}: STORY GENERATION ---\n")
-    
-    # Story prompt includes previous summary and last story segment
-    story_prompt = f"Round {round_number} of 10\n\nGuidelines: {theme_sentence}\n\nSummary of prior events: {summary}\n\n\nPrevious story segment:\n\n\n{story_user_prompt}\n\n\nContinue the story or begin one based on the guidelines if there is no context. If creating a new story based on the guidelines, start before the beginning. Write about events that led up to this, etc. Let the theme develop over the 10 rounds instead of jumping to the end right away."
-    print(story_prompt)
-    # Generate story segment
-    story_segment = stream_ollama(story_system_prompt, story_prompt)
-    
-    with open("allstory.txt","a") as finalstory:
-        finalstory.write("\n" + story_segment)
+    groups = []
+    current_group = []
+    current_word_count = 0
 
-    # Update summary using previous summary and new story segment
-    summary_prompt = f"Previous Summary: {summary}\n\n\n\nNew Story Segment: {story_segment}\n\n\n\nUpdate the summary."
-    print(summary_prompt)
-    summary = stream_ollama(summary_system_prompt, summary_prompt)
-    
-    # Set the new story segment as prompt for next round
-    story_user_prompt = story_segment
+    for sentence in sentences:
+        words_in_sentence = len(sentence.split())
+
+        current_group.append(sentence)
+        current_word_count += words_in_sentence
+
+        if current_word_count >= min_words:
+            groups.append(" ".join(current_group))
+            current_group = []
+            current_word_count = 0
+
+    # If leftover sentences remain, append them to the last group
+    if current_group:
+        if groups:
+            groups[-1] += " " + " ".join(current_group)
+        else:
+            groups.append(" ".join(current_group))
+
+    return groups
+
+
+
+# Load the Turbo model
+model = ChatterboxTurboTTS.from_pretrained(device="cpu")
+
+
+def generate_audio(text, outputfile):
+    # Generate with Paralinguistic Tags
+    wav = model.generate(text, audio_prompt_path="input/thirteen.wav") # are you serious, it was commented out THIS WHOLE TIME????
+    # wav = model.generate(text)
+    ta.save(outputfile, wav, model.sr)
+
+
+
+result = split_into_groups(script)
+print("")
+print(f"Total number of groups: {len(result)}. Estimated time {len(result)*10}sec")
+for i, group in enumerate(result, 1):
+    print("")
+    print(f"Group {i}: ({len(group.split())} words)")
+    print(group)
+    generate_audio(group, f"temp/tts_snippets/{i}_generated.wav")
+
+
+
+
+print("")
+print("================================")
+print("Combining audio...")
+print("================================")
+print("")
+
+# Combine all audio files together
+
+INPUT_FOLDER = "temp/tts_snippets"
+OUTPUT_FILE = "temp/merged.wav"
+DELAY_MS = 10
+SILENCE_DBFS = -60
+
+
+def extract_number(filename: str) -> int | None:
+    match = re.match(r"(\d+)_generated\.wav$", filename)
+    return int(match.group(1)) if match else None
+
+
+
+
+def combineaudio():
+    files = []
+
+    for name in os.listdir(INPUT_FOLDER):
+        number = extract_number(name)
+        if number is not None:
+            files.append((number, name))
+
+    if not files:
+        raise RuntimeError("No valid '*_generated.wav' files found.")
+
+    # Sort numerically, not alphabetically
+    files.sort(key=lambda x: x[0])
+
+    silence = AudioSegment.silent(duration=DELAY_MS)
+    merged = AudioSegment.empty()
+
+    for index, filename in files:
+        path = os.path.join(INPUT_FOLDER, filename)
+        audio = AudioSegment.from_wav(path)
+
+        if len(merged) > 0:
+            merged += silence
+
+        merged += audio
+
+        print(f"Added: {filename}")
+
+    merged.export(OUTPUT_FILE, format="wav")
+    print(f"\nMerged file written to: {OUTPUT_FILE}")
+
+
+combineaudio()
+
+
+
+
+
+
+
+# speed up audio by 10% (the slower audio works better with the TTS)
+print("")
+print("================================")
+print("Speeding up audio...")
+print("================================")
+print("")
+subprocess.run([
+    "ffmpeg", "-i", "temp/merged.wav", "-y", 
+    "-af", "asetrate=24000*1.1,aresample=24000", 
+    "temp/spedup.wav"
+])
+
+
+
+# Generate subtitles TXT file by putting every word on a new line
+
+with open("temp/subtitles.txt", "w", encoding="utf-8") as f:
+    for word in script.split():
+        f.write(word + "\n\n")
+        print(word)
+
+
+
+# run the align subtitles script
+
+print("")
+print("================================")
+print("Aligning subtitles...")
+print("================================")
+print("")
+
+
+# Old aeneas method:
+# subprocess.run(["wsl", "-e", "bash", "-c", "\"./align_subtitles.sh\""])
+
+subprocess.run([sys.executable, "ack.py"]) # Todo: do this in chunks if needed
+
+
+
+# trim and add audio to the video
+
+print("")
+print("================================")
+print("Preparing video...")
+print("================================")
+print("")
+subprocess.run(["ffmpeg", "-ss", "00:01:00", "-to", "00:06:00", "-i", "input/source.mkv", "-c", "copy", "-y", "-avoid_negative_ts", "make_zero", "temp/trimmed.mp4"]) # todo: trim based on length of audio
+subprocess.run(["ffmpeg", "-i", "temp/trimmed.mp4", "-i", "temp/spedup.wav", "-y", "-c:v", "copy", "-c:a", "aac", "-strict", "experimental", "temp/audio_added.mp4"])
+
+# run the python script in the venv
+print("")
+print("================================")
+print("Rendering video...")
+print("This is the last step I promise")
+print("================================")
+print("")
+
+
+
+# old slow method
+# subprocess.run([sys.executable, "add_subtitles.py", "temp/audio_added.mp4", "temp/output.srt", "temp/subtitles_added.mp4"])
+
+
+subprocess.run(["ffmpeg", "-i", "temp/audio_added.mp4", "-y", "-vf", "subtitles=temp/output.ass:fontsdir=./input", "-c:a", "copy", "-preset", "ultrafast", "-threads", "12", "-crf", "21", "output/output.mp4"])
+
+
+print("")
+print("Finished!")
+print("Final video has been saved to output/output.mp4")
