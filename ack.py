@@ -45,7 +45,7 @@ EN_DASH = "–"   # U+2013
 
 def normalize_text(text: str) -> str:
     text = text.translate(SMART_QUOTES)
-    text = text.replace(EM_DASH, ": ")
+    text = text.replace(EM_DASH, ", ")
     text = text.replace(EN_DASH, "-")
     return text
 

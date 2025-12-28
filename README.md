@@ -5,7 +5,6 @@ Disclaimer: this project is an experiment and has some AI-generated code
 
 
 # Todo priority
-- fix utf-8 error (half done?)
 - add a clean up script (fix audio merging also adding files from previous generations)
 
 # TODO
