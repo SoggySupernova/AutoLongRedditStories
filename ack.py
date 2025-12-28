@@ -26,11 +26,38 @@ print("Loading audio...")
 audio_waveform = load_audio(audio_path, alignment_model.dtype, alignment_model.device)
 print("Loaded")
 
+import sys
 
-with open(text_path, "r") as f:
+# Translation table for smart quotes
+SMART_QUOTES = {
+    ord("“"): '"',
+    ord("”"): '"',
+    ord("„"): '"',
+    ord("‟"): '"',
+    ord("‘"): "'",
+    ord("’"): "'",
+    ord("‚"): "'",
+    ord("‛"): "'",
+}
+
+EM_DASH = "—"   # U+2014
+EN_DASH = "–"   # U+2013
+
+def normalize_text(text: str) -> str:
+    text = text.translate(SMART_QUOTES)
+    text = text.replace(EM_DASH, ": ")
+    text = text.replace(EN_DASH, "-")
+    return text
+
+
+
+
+
+with open(text_path, "r", encoding="utf8") as f:
     lines = f.readlines()
-text = "".join(line for line in lines).replace("\n", " ").strip().replace("’","'") # Flatten smart quotes to fix encoding errors, will need to do more in the future
-
+text = "".join(line for line in lines).replace("\n", " ").strip()
+text = normalize_text(text).replace('\u2026','...')
+print(text)
 print("Processing... This will take a while.")
 emissions, stride = generate_emissions(
     alignment_model, audio_waveform, batch_size=batch_size

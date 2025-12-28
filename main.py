@@ -73,7 +73,7 @@ print("")
 print(f"Total number of groups: {len(result)}. Estimated time {len(result)*10}sec")
 for i, group in enumerate(result, 1):
     print("")
-    print(f"Group {i}: ({len(group.split())} words)")
+    print(f"Group {i}/{len(result)}: {len(group.split())} words")
     print(group)
     generate_audio(group, f"temp/tts_snippets/{i}_generated.wav")
 
