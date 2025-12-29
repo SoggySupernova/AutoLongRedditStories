@@ -3,7 +3,7 @@ import json
 
 
 
-numrounds = 3
+numrounds = 10
 
 
 
@@ -73,7 +73,7 @@ def stream_ollama(system, user_prompt):
 
 for round_number in range(1, numrounds + 1):
     print(f"=== ROUND {round_number}: STORY GENERATION ===\n")
-    story_prompt = f"Round {round_number} of {numrounds}\n\nGuidelines: {theme_sentence}\n\nSummary of prior events: {summary}\n\n\nPrevious story segment:\n\n\n{story_user_prompt}\n\n\nContinue the story or begin one based on the guidelines if there is no context. If creating a new story based on the guidelines, start before the beginning. Write about events that led up to this, etc. Let the theme develop over the {numrounds} rounds instead of jumping to the end right away. Do not use any Markdown styling. NEVER use an em dash. Use a comma, colon, or semicolon instead."
+    story_prompt = f"Round {round_number} of {numrounds}\n\nGuidelines: {theme_sentence}\n\nSummary of prior events: {summary}\n\n\nPrevious story segment:\n\n\n{story_user_prompt}\n\n\nContinue the story or begin one based on the guidelines if there is no context. If creating a new story based on the guidelines, start before the beginning. Write about events that led up to this, etc. Let the theme develop over the {numrounds} rounds instead of jumping to the end right away. NEVER use any Markdown styling or any asterisks."
     print(story_prompt)
     print("\n\n\n")
     # Generate story segment
