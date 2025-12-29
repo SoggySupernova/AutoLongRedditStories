@@ -6,11 +6,13 @@ import json
 numrounds = 10
 
 
+# Todo: do not include latest summary in story generation, information already exists in previous segment
 
 # System prompt for story generation
 story_system_prompt = """
-You are a long-form story generator. 
+You are a long-form story generator.
 Generate a coherent story segment of about 200 tokens.
+The story should be fiction but plausible—no fantasy creatures or environments.
 Do NOT include the summary in the story.
 Respond ONLY with the story continuation.
 """
@@ -20,6 +22,7 @@ summary_system_prompt = """
 You are a story summarizer. 
 Based on the previous summary and the new story segment, update the summary to about 400 words.
 If there is no previous summary, just create a summary about 200 words.
+Do not hallucinate new information not in the story segment or previous summary.
 The summary should include specific names, objects, and ideas, not general feelings, etc. The goal is to keep a separate story generator model from forgetting important details and losing continuity.
 Include only essential story details, character developments, plot progression, and unresolved threads.
 VERY IMPORTANT: DO NOT REPLACE IT WITH A SUMMARY OF THE NEW SEGMENT. ADD OR UPDATE INFORMATION. ONLY REMOVE INFORMATION IF THE SUMMARY GETS TOO LARGE. IF SO, ONLY REMOVE UNNECCESSARY INFORMATION.
@@ -36,10 +39,14 @@ Plot: Strange sounds begin exactly at midnight, and the narrator uncovers a patt
 # Initial empty summary
 summary = ""
 
+
+# Different prompt for the first time works better with smaller models
+story_prompt = f"Round 1 of {numrounds}\n\nWrite the beginning of a new story based on the opener and plot. Let the theme develop over the {numrounds} rounds instead of jumping to the end right away. NEVER use any Markdown styling or any asterisks.\n\n{theme_sentence}\nSummary: No summary yet."
+
 # Ollama API settings
 url = "http://localhost:11434/api/chat"
 options = {"num_gpu": -1, "num_ctx": 65536}
-model_name = "ministral-3:8b-instruct-2512-q4_K_M"
+model_name = "ministral-3:8b-instruct-2512-q4_K_M" # gemma3:270m
 
 def stream_ollama(system, user_prompt):
     """Call Ollama API with streaming and return generated content"""
@@ -51,7 +58,7 @@ def stream_ollama(system, user_prompt):
         ],
         "stream": True,
         "options": options,
-        "keep_alive": 0
+        "keep_alive": 100
     }
 
     response = requests.post(url, json=data, stream=True)
@@ -72,8 +79,14 @@ def stream_ollama(system, user_prompt):
 
 
 for round_number in range(1, numrounds + 1):
+
+
+    if round_number > 1:
+        story_prompt = f"Round {round_number} of {numrounds}\n\nGuidelines: {theme_sentence}\n\nSummary of prior events: {summary}\n\n\nPrevious story segment:\n\n\n{story_user_prompt}\n\n\nContinue the story based on the guidelines, summary, and previous segment. NEVER use any Markdown styling."
+
+
+
     print(f"=== ROUND {round_number}: STORY GENERATION ===\n")
-    story_prompt = f"Round {round_number} of {numrounds}\n\nGuidelines: {theme_sentence}\n\nSummary of prior events: {summary}\n\n\nPrevious story segment:\n\n\n{story_user_prompt}\n\n\nContinue the story or begin one based on the guidelines if there is no context. If creating a new story based on the guidelines, start before the beginning. Write about events that led up to this, etc. Let the theme develop over the {numrounds} rounds instead of jumping to the end right away. NEVER use any Markdown styling or any asterisks."
     print(story_prompt)
     print("\n\n\n")
     # Generate story segment
@@ -84,6 +97,8 @@ for round_number in range(1, numrounds + 1):
 
     # Update summary using previous summary and new story segment
     summary_prompt = f"Previous Summary: {summary}\n\n\n\nNew Story Segment: {story_segment}\n\n\n\nUpdate the summary."
+
+    print("\n\n\n\n\nUPDATING SUMMARY")
     print(summary_prompt)
     summary = stream_ollama(summary_system_prompt, summary_prompt)
     

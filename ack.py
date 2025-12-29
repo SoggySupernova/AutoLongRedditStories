@@ -56,7 +56,7 @@ def normalize_text(text: str) -> str:
 with open(text_path, "r", encoding="utf8") as f:
     lines = f.readlines()
 text = "".join(line for line in lines).replace("\n", " ").strip()
-text = normalize_text(text).replace('\u2026','...')
+text = normalize_text(text).replace('\u2026','...').replace('*','') # I've tried telling it to not use asterisks but it still did adhgsahdfdjfh
 print(text)
 print("Processing... This will take a while.")
 emissions, stride = generate_emissions(
@@ -141,7 +141,7 @@ def json_to_srt(
             f.write(f"{item['text']}\n\n")
 
 
-json_to_srt(word_timestamps, "temp/output.srt", speed_multiplier=1.1) # so for some reason 1.1 doesn't work but 1.15 does???
+json_to_srt(word_timestamps, "temp/output.srt", speed_multiplier=1.1) # 1.15 works better for short snippets for some reason
 
 
 

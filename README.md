@@ -6,6 +6,7 @@ Disclaimer: this project is an experiment and has some AI-generated code
 
 # Todo priority
 - add a clean up script (fix audio merging also adding files from previous generations)
+- and also reset allstory
 
 # TODO
 - some sort of welcome screen with a "generate topics or I already have an idea" choices
