@@ -25,8 +25,8 @@ If there is no previous summary, just create a summary about 200 words.
 Do not hallucinate new information not in the story segment or previous summary.
 The summary should include specific names, objects, and ideas, not general feelings, etc. The goal is to keep a separate story generator model from forgetting important details and losing continuity.
 Include only essential story details, character developments, plot progression, and unresolved threads.
-VERY IMPORTANT: DO NOT REPLACE IT WITH A SUMMARY OF THE NEW SEGMENT. ADD OR UPDATE INFORMATION. ONLY REMOVE INFORMATION IF THE SUMMARY GETS TOO LARGE. IF SO, ONLY REMOVE UNNECCESSARY INFORMATION.
-Respond ONLY with the summary.
+VERY IMPORTANT: DO NOT REPLACE IT WITH A SUMMARY OF THE NEW SEGMENT. ONLY ADD OR UPDATE INFORMATION TO THE EXISTING SUMMARY. ONLY REMOVE INFORMATION IF THE SUMMARY GETS TOO LARGE. IF SO, ONLY REMOVE UNNECCESSARY INFORMATION.
+ONLY RESPOND with the summary. Do not write another story segment yet. Do not start your response with "here's the updated summary:", etc.
 """
 
 # Initial user prompt for story generation
@@ -37,7 +37,7 @@ Plot: Strange sounds begin exactly at midnight, and the narrator uncovers a patt
 """
 
 # Initial empty summary
-summary = ""
+summary = "No summary yet."
 
 
 # Different prompt for the first time works better with smaller models
@@ -46,7 +46,7 @@ story_prompt = f"Round 1 of {numrounds}\n\nWrite the beginning of a new story ba
 # Ollama API settings
 url = "http://localhost:11434/api/chat"
 options = {"num_gpu": -1, "num_ctx": 65536}
-model_name = "ministral-3:8b-instruct-2512-q4_K_M" # gemma3:270m
+model_name = "gemma3:4b" # ministral-3:8b-instruct-2512-q4_K_M, gemma3:1b, or gemma3:270m for slower machines
 
 def stream_ollama(system, user_prompt):
     """Call Ollama API with streaming and return generated content"""
