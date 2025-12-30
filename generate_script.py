@@ -1,27 +1,33 @@
 import requests
 import json
+import os
 
+
+# clear previous story
+with open("temp/allstory.txt","w") as blank:
+    blank.write("")
 
 
 numrounds = 10
 
 
-# Todo: do not include latest summary in story generation, information already exists in previous segment
-
 # System prompt for story generation
 story_system_prompt = """
 You are a long-form story generator.
-Generate a coherent story segment of about 200 tokens.
+Generate a coherent story segment of about 200 words.
 The story should be fiction but plausible—no fantasy creatures or environments.
 Do NOT include the summary in the story.
-Respond ONLY with the story continuation.
+Respond ONLY with the new segment of the story.
+Do not repeat the previous part of the story in your response.
+Never use any Markdown styling.
 """
 
 # System prompt for summary update
 summary_system_prompt = """
 You are a story summarizer. 
-Based on the previous summary and the new story segment, update the summary to about 400 words.
-If there is no previous summary, just create a summary about 200 words.
+Based on the previous summary and the new story segment, update the summary to about 100 words.
+If there is no previous summary, just create a summary about 100 words.
+The summary should be bullet-point style.
 Do not hallucinate new information not in the story segment or previous summary.
 The summary should include specific names, objects, and ideas, not general feelings, etc. The goal is to keep a separate story generator model from forgetting important details and losing continuity.
 Include only essential story details, character developments, plot progression, and unresolved threads.
@@ -32,12 +38,14 @@ ONLY RESPOND with the summary. Do not write another story segment yet. Do not st
 # Initial user prompt for story generation
 story_user_prompt = ""
 theme_sentence = """
-Opener: “My landlord texted, ‘Whatever you hear from apartment 3B tomorrow, you didn’t hear it.’”
+Hook (only write the first round): “My landlord texted, ‘Whatever you hear from apartment 3B tomorrow, you didn’t hear it.’”
 Plot: Strange sounds begin exactly at midnight, and the narrator uncovers a pattern tied to former tenants who all moved out within a week.
 """
 
 # Initial empty summary
 summary = "No summary yet."
+
+lastsummary = "No summary yet."
 
 
 # Different prompt for the first time works better with smaller models
@@ -82,7 +90,7 @@ for round_number in range(1, numrounds + 1):
 
 
     if round_number > 1:
-        story_prompt = f"Round {round_number} of {numrounds}\n\nGuidelines: {theme_sentence}\n\nSummary of prior events: {summary}\n\n\nPrevious story segment:\n\n\n{story_user_prompt}\n\n\nContinue the story based on the guidelines, summary, and previous segment. NEVER use any Markdown styling."
+        story_prompt = f"Round {round_number} of {numrounds}\n\nGuidelines: {theme_sentence}\n\nSummary of prior events: {lastsummary}\n\n\nPrevious story segment:\n\n\n{story_user_prompt}\n\n\nContinue the story based on the guidelines, summary, and previous segment." # use older summary to prevent repeated information
 
 
 
@@ -99,6 +107,7 @@ for round_number in range(1, numrounds + 1):
     summary_prompt = f"Previous Summary: {summary}\n\n\n\nNew Story Segment: {story_segment}\n\n\n\nUpdate the summary."
 
     print("\n\n\n\n\nUPDATING SUMMARY")
+    lastsummary = summary
     print(summary_prompt)
     summary = stream_ollama(summary_system_prompt, summary_prompt)
     
