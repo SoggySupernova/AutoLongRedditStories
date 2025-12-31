@@ -5,12 +5,11 @@ Disclaimer: this project is an experiment and has some AI-generated code
 
 
 # Todo priority
-- add a clean up script (fix audio merging also adding files from previous generations)
-- and also reset allstory
+- find long term solution for git problem
+- implement script generation into main script
 
 # TODO
 - some sort of welcome screen with a "generate topics or I already have an idea" choices
-- implement script generation
 - easy install script
 - thumbnail generator
 - write documentation
