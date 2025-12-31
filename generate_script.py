@@ -14,33 +14,35 @@ numrounds = 10
 # System prompt for story generation
 story_system_prompt = """
 You are a long-form story generator.
-Generate a coherent story segment of about 200 words.
-The story should be fiction but plausible—no fantasy creatures or environments.
+Generate a coherent story segment of about 300 words.
+The story should be fiction but plausible—no creepy monsters, fantasy creatures, or impossible environments.
 Do NOT include the summary in the story.
 Respond ONLY with the new segment of the story.
 Do not repeat the previous part of the story in your response.
 Never use any Markdown styling.
+Never use these overused first or last names: Elias, Thorne, Silas, or Blackwood.
 """
 
 # System prompt for summary update
 summary_system_prompt = """
-You are a story summarizer. 
-Based on the previous summary and the new story segment, update the summary to about 100 words.
-If there is no previous summary, just create a summary about 100 words.
-The summary should be bullet-point style.
-Do not hallucinate new information not in the story segment or previous summary.
-The summary should include specific names, objects, and ideas, not general feelings, etc. The goal is to keep a separate story generator model from forgetting important details and losing continuity.
-Include only essential story details, character developments, plot progression, and unresolved threads.
-VERY IMPORTANT: DO NOT REPLACE IT WITH A SUMMARY OF THE NEW SEGMENT. ONLY ADD OR UPDATE INFORMATION TO THE EXISTING SUMMARY. ONLY REMOVE INFORMATION IF THE SUMMARY GETS TOO LARGE. IF SO, ONLY REMOVE UNNECCESSARY INFORMATION.
-ONLY RESPOND with the summary. Do not write another story segment yet. Do not start your response with "here's the updated summary:", etc.
+You are a story summarizer. Using the existing summary and the new story segment, update the summary to approximately 200 words.
+
+* If no prior summary exists, create a new one (~100 words).
+* Use bullet points.
+* **MOST IMPORTANT**: Only add or modify information based on the new segment; **do not replace the summary with a recap of the new segment.**
+* Remove information only if needed to keep the summary within length, and remove only nonessential details.
+* Do not invent details beyond the provided text.
+* Include specific names, objects, events, and unresolved plot threads.
+* Focus on essential plot progression, character developments, and continuity-critical details.
+
+Respond with the summary only. Do not add commentary or generate new story content.
 """
 
 # Initial user prompt for story generation
 story_user_prompt = ""
-theme_sentence = """
-Hook (only write the first round): “My landlord texted, ‘Whatever you hear from apartment 3B tomorrow, you didn’t hear it.’”
-Plot: Strange sounds begin exactly at midnight, and the narrator uncovers a pattern tied to former tenants who all moved out within a week.
-"""
+theme_sentence = "Strange sounds begin exactly at midnight, and the narrator uncovers a pattern tied to former tenants who all moved out within a week."
+
+hook_sentence = "My landlord texted, 'Whatever you hear from apartment 3B tomorrow, you didn't hear it.'"
 
 # Initial empty summary
 summary = "No summary yet."
@@ -49,7 +51,7 @@ lastsummary = "No summary yet."
 
 
 # Different prompt for the first time works better with smaller models
-story_prompt = f"Round 1 of {numrounds}\n\nWrite the beginning of a new story based on the opener and plot. Let the theme develop over the {numrounds} rounds instead of jumping to the end right away. NEVER use any Markdown styling or any asterisks.\n\n{theme_sentence}\nSummary: No summary yet."
+story_prompt = f"Round 1 of {numrounds}\n\nWrite the beginning of a new story based on the opener and plot. Let the theme develop over the {numrounds} rounds instead of jumping to the end right away. NEVER use any Markdown styling or any asterisks.\n\nOverall Plot: {theme_sentence}\nHook: \"{hook_sentence}\"\nSummary: No summary yet."
 
 # Ollama API settings
 url = "http://localhost:11434/api/chat"
@@ -81,16 +83,20 @@ def stream_ollama(system, user_prompt):
                     result += content
             except Exception:
                 continue
-    print("\n")  # separate each stream visually
+    print("\n")
     return result
 
-
+endingmessage = ""
 
 for round_number in range(1, numrounds + 1):
 
+    if round_number > (numrounds - 2):
+        endingmessage = ": Start wrapping up the story"
+    if round_number > (numrounds - 1):
+        endingmessage = ": Wrap up the story"
 
     if round_number > 1:
-        story_prompt = f"Round {round_number} of {numrounds}\n\nGuidelines: {theme_sentence}\n\nSummary of prior events: {lastsummary}\n\n\nPrevious story segment:\n\n\n{story_user_prompt}\n\n\nContinue the story based on the guidelines, summary, and previous segment." # use older summary to prevent repeated information
+        story_prompt = f"Round {round_number} of {numrounds}{endingmessage}\n\nOverall Plot: {theme_sentence}\n\nSummary of prior events: {lastsummary}\n\n\nPrevious story segment:\n\n\n{story_user_prompt}\n\n\nContinue the story based on the theme, summary, and previous segment." # use older summary to prevent repeated information
 
 
 
