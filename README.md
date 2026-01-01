@@ -6,7 +6,6 @@ Disclaimer: this project is an experiment and has some AI-generated code
 
 # Todo priority
 - find long term solution for git problem
-- implement script generation into main script
 
 # TODO
 - some sort of welcome screen with a "generate topics or I already have an idea" choices
@@ -18,10 +17,9 @@ Disclaimer: this project is an experiment and has some AI-generated code
 
 # But how is this different from [elebumm/RedditVideoMakerBot](https://github.com/elebumm/RedditVideoMakerBot)?
 
-- this is worse
-- this uses one long story instead of multiple comments
-- the story is AI generated instead of pulled from reddit
-- this is worse
+- This script uses one long story instead of multiple comments.
+- The story is AI generated instead of pulled from Reddit.
+- This is fully local after initial model downloading.
 
 
 # Usage Instructions

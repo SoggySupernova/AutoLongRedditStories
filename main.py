@@ -1,3 +1,10 @@
+import subprocess
+import sys
+
+# Generate script, run venv python
+subprocess.run([sys.executable, "generate_script.py"])
+
+
 print("")
 print("================================")
 print("Generating TTS...")
@@ -10,9 +17,9 @@ import torch
 import re
 import os
 from pydub import AudioSegment
-import subprocess
-import sys
 from pathlib import Path
+
+
 
 
 
@@ -196,7 +203,7 @@ print("")
 subprocess.run(["ffmpeg", "-ss", "00:01:00", "-to", "00:30:00", "-i", "input/source.mkv", "-c", "copy", "-y", "-avoid_negative_ts", "make_zero", "temp/trimmed.mp4"]) # todo: trim based on length of audio
 subprocess.run(["ffmpeg", "-i", "temp/trimmed.mp4", "-i", "temp/spedup.wav", "-y", "-c:v", "copy", "-c:a", "aac", "-strict", "experimental", "temp/audio_added.mp4"])
 
-# run the python script in the venv
+# add captions to the video
 print("")
 print("================================")
 print("Rendering video...")
