@@ -19,6 +19,7 @@ The story should be fiction but plausible—no creepy monsters, fantasy creature
 Do NOT include the summary in the story.
 Respond ONLY with the new segment of the story.
 Do not repeat the previous part of the story in your response.
+Do not stray too far from the original theme.
 Never use any Markdown styling.
 Never use these overused first or last names: Elias, Thorne, Silas, or Blackwood.
 """
@@ -40,9 +41,17 @@ Respond with the summary only. Do not add commentary or generate new story conte
 
 # Initial user prompt for story generation
 story_user_prompt = ""
-theme_sentence = "Strange sounds begin exactly at midnight, and the narrator uncovers a pattern tied to former tenants who all moved out within a week."
 
-hook_sentence = "My landlord texted, 'Whatever you hear from apartment 3B tomorrow, you didn't hear it.'"
+
+
+
+hook_sentence = "My mom finally admitted why she never lets me drive at night."
+
+theme_sentence = "After your car breaks down, she reveals a past accident seven years ago in the rain that never appeared in any police record."
+
+
+
+
 
 # Initial empty summary
 summary = "No summary yet."
@@ -51,7 +60,7 @@ lastsummary = "No summary yet."
 
 
 # Different prompt for the first time works better with smaller models
-story_prompt = f"Round 1 of {numrounds}\n\nWrite the beginning of a new story based on the opener and plot. Let the theme develop over the {numrounds} rounds instead of jumping to the end right away. NEVER use any Markdown styling or any asterisks.\n\nOverall Plot: {theme_sentence}\nHook: \"{hook_sentence}\"\nSummary: No summary yet."
+story_prompt = f"Round 1 of {numrounds}\n\nWrite the beginning of a new story based on the opener and plot. Let the theme develop over the {numrounds} rounds instead of jumping to the end right away. NEVER use any Markdown styling or any asterisks.\n\nHook sentence: {hook_sentence}\nOverall Plot: {theme_sentence}\nSummary: No summary yet."
 
 # Ollama API settings
 url = "http://localhost:11434/api/chat"
