@@ -1,4 +1,7 @@
+print("Loading model...")
+
 import torch
+
 from ctc_forced_aligner import (
     load_audio,
     load_alignment_model,
@@ -58,10 +61,30 @@ with open(text_path, "r", encoding="utf8") as f:
 text = "".join(line for line in lines).replace("\n", " ").strip()
 text = normalize_text(text).replace('\u2026','...').replace('*','') # I've tried telling it to not use asterisks but it still did adhgsahdfdjfh
 print(text)
+
+print("\n\n\n")
 print("Processing... This will take a while.")
-emissions, stride = generate_emissions(
-    alignment_model, audio_waveform, batch_size=batch_size
-)
+
+
+
+
+
+emissions, stride = generate_emissions(alignment_model, audio_waveform, batch_size=batch_size)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 tokens_starred, text_starred = preprocess_text(

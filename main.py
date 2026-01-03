@@ -195,7 +195,7 @@ print("")
 # Old aeneas method:
 # subprocess.run(["wsl", "-e", "bash", "-c", "\"./align_subtitles.sh\""])
 
-subprocess.run([sys.executable, "ack.py"]) # Todo: do this in chunks if needed
+subprocess.run([sys.executable, "align_subtitles.py"]) # Todo: do this in chunks if needed
 
 
 
