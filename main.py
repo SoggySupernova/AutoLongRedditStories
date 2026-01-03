@@ -1,5 +1,12 @@
 import subprocess
 import sys
+import os
+try:
+    os.mkdir("input")
+    os.mkdir("output")
+    os.mkdirs("temp/tts_snippets")
+except FileExistsError:
+    print("directory already exists, ignoring")
 
 # Generate script, run venv python
 subprocess.run([sys.executable, "generate_script.py"])
@@ -15,7 +22,6 @@ from chatterbox.tts_turbo import ChatterboxTurboTTS
 import torchaudio as ta
 import torch
 import re
-import os
 from pydub import AudioSegment
 from pathlib import Path
 

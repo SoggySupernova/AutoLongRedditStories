@@ -4,8 +4,6 @@ Automate those annoying AI-narrated Reddit stories with minecraft parkour in the
 Disclaimer: this project is an experiment and has some AI-generated code
 
 
-# Todo priority
-- find long term solution for git problem
 
 # TODO
 - some sort of welcome screen with a "generate topics or I already have an idea" choices
