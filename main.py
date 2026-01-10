@@ -8,8 +8,11 @@ try:
 except FileExistsError:
     print("directory already exists, ignoring")
 
-# Generate script, run venv python
-subprocess.run([sys.executable, "generate_script.py"])
+if "--skip-script-generation" in sys.argv:
+    print("Skipping script generation")
+else:
+    # Generate script, run venv python
+    subprocess.run([sys.executable, "generate_script.py"])
 
 
 print("")

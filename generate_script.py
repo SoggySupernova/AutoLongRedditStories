@@ -14,14 +14,24 @@ numrounds = 10
 # System prompt for story generation
 story_system_prompt = """
 You are a long-form story generator.
+
+**Response Formatting:**
 Generate a coherent story segment of about 300 words.
-The story should be fiction but plausible—no creepy monsters, fantasy creatures, or impossible environments.
 Do NOT include the summary in the story.
 Respond ONLY with the new segment of the story.
 Do not repeat the previous part of the story in your response.
-Do not stray too far from the original theme.
 Never use any Markdown styling.
-Never use these overused first or last names: Elias, Thorne, Silas, or Blackwood.
+
+
+**Story Style**:
+The story should be fiction but plausible—no creepy monsters, fantasy creatures, or impossible environments.
+Do not stray too far from the original theme.
+If the story begins to sound abstract, symbolic, philosophical, or metaphorical, immediately course-correct by returning to concrete actions, dialogue, or physical investigation.
+Do not use any quoted dialogue, instead describe what is being said.
+For example:
+**INSTEAD OF WRITING:** Mr. Henderson said, "I… I was preparing for some routine maintenance!"
+**YOU CAN WRITE:** Mr. Henderson said he was only preparing for some routine mainenance.
+
 """
 
 # System prompt for summary update
@@ -45,9 +55,13 @@ story_user_prompt = ""
 
 
 
-hook_sentence = "My mom finally admitted why she never lets me drive at night."
+hook_sentence = "The principal gathered everyone in the gymnasium and said, \"One of you, confess NOW.\""
 
-theme_sentence = "After your car breaks down, she reveals a past accident seven years ago in the rain that never appeared in any police record."
+
+
+
+
+theme_sentence = "The narrator discovers that one of their classmates performed a prank on the principal that went out of hand."
 
 
 
@@ -60,7 +74,7 @@ lastsummary = "No summary yet."
 
 
 # Different prompt for the first time works better with smaller models
-story_prompt = f"Round 1 of {numrounds}\n\nWrite the beginning of a new story based on the opener and plot. Let the theme develop over the {numrounds} rounds instead of jumping to the end right away. NEVER use any Markdown styling or any asterisks.\n\nHook sentence: {hook_sentence}\nOverall Plot: {theme_sentence}\nSummary: No summary yet."
+story_prompt = f"Round 1 of {numrounds}\n\nWrite the beginning of a new story based on the opener and plot. **Let the theme and plot develop over the {numrounds} rounds instead of jumping to the end right away. The narrator should not know about the full plot at the beginning.** Do not repeat the hook sentence in the story, but the beginning of the story should take place right after the hook sentence. NEVER use any Markdown styling or any asterisks.\n\nHook sentence: {hook_sentence}\nOverall Plot: {theme_sentence}\nSummary: No summary yet."
 
 # Ollama API settings
 url = "http://localhost:11434/api/chat"
@@ -105,11 +119,13 @@ for round_number in range(1, numrounds + 1):
         endingmessage = ": Wrap up the story"
 
     if round_number > 1:
-        story_prompt = f"Round {round_number} of {numrounds}{endingmessage}\n\nOverall Plot: {theme_sentence}\n\nSummary of prior events: {lastsummary}\n\n\nPrevious story segment:\n\n\n{story_user_prompt}\n\n\nContinue the story based on the theme, summary, and previous segment." # use older summary to prevent repeated information
+        story_prompt = f"Round {round_number} of {numrounds}{endingmessage}\n\nOverall Plot: {theme_sentence}\n\nSummary of prior events: {lastsummary}\n\n\nPrevious story segment:\n\n\n{story_user_prompt}\n\n\nContinue the story based on the theme, summary, and previous segment.\n**Let the theme and plot develop over the {numrounds} rounds instead of jumping to the end right away. The narrator should not know about the full plot at the beginning.**" # use older summary to prevent repeated information
 
 
 
     print(f"=== ROUND {round_number}: STORY GENERATION ===\n")
+    print(story_system_prompt)
+    print("\n\n\n")
     print(story_prompt)
     print("\n\n\n")
     # Generate story segment
