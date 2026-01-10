@@ -10,6 +10,10 @@ with open("temp/allstory.txt","w") as blank:
 
 numrounds = 10
 
+def get_last_paragraph(text):
+    paragraphs = [p.strip() for p in text.split("\n") if p.strip()]
+    return paragraphs[-1] if paragraphs else ""
+
 
 # System prompt for story generation
 story_system_prompt = """
@@ -70,7 +74,6 @@ theme_sentence = "The narrator discovers that one of their classmates performed 
 # Initial empty summary
 summary = "No summary yet."
 
-lastsummary = "No summary yet."
 
 
 # Different prompt for the first time works better with smaller models
@@ -111,15 +114,31 @@ def stream_ollama(system, user_prompt):
 
 endingmessage = ""
 
-for round_number in range(1, numrounds + 1):
+last_paragraph = ""
 
+
+for round_number in range(1, numrounds + 1):
     if round_number > (numrounds - 2):
         endingmessage = ": Start wrapping up the story"
     if round_number > (numrounds - 1):
         endingmessage = ": Wrap up the story"
 
     if round_number > 1:
-        story_prompt = f"Round {round_number} of {numrounds}{endingmessage}\n\nOverall Plot: {theme_sentence}\n\nSummary of prior events: {lastsummary}\n\n\nPrevious story segment:\n\n\n{story_user_prompt}\n\n\nContinue the story based on the theme, summary, and previous segment.\n**Let the theme and plot develop over the {numrounds} rounds instead of jumping to the end right away. The narrator should not know about the full plot at the beginning.**" # use older summary to prevent repeated information
+        story_prompt = f"""Round {round_number} of {numrounds}{endingmessage}
+
+Overall Plot: {theme_sentence}
+
+Current Summary:
+{summary}
+
+Last paragraph of previous segment:
+{last_paragraph}
+
+Continue the story naturally from the last paragraph.
+Do not restate summarized information.
+Let the theme and plot develop over the {numrounds} rounds instead of jumping to the end right away.
+The narrator should not know about the full plot at the beginning.
+""" # indentation is weird
 
 
 
@@ -130,6 +149,7 @@ for round_number in range(1, numrounds + 1):
     print("\n\n\n")
     # Generate story segment
     story_segment = stream_ollama(story_system_prompt, story_prompt)
+    last_paragraph = get_last_paragraph(story_segment)
     
     with open("temp/allstory.txt","a") as finalstory:
         finalstory.write("\n" + story_segment)
@@ -138,7 +158,6 @@ for round_number in range(1, numrounds + 1):
     summary_prompt = f"Previous Summary: {summary}\n\n\n\nNew Story Segment: {story_segment}\n\n\n\nUpdate the summary."
 
     print("\n\n\n\n\nUPDATING SUMMARY")
-    lastsummary = summary
     print(summary_prompt)
     summary = stream_ollama(summary_system_prompt, summary_prompt)
     
