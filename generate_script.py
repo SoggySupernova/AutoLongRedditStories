@@ -59,13 +59,13 @@ story_user_prompt = ""
 
 
 
-hook_sentence = "The principal gathered everyone in the gymnasium and said, \"One of you, confess NOW.\""
+hook_sentence = "The vet asked when my dog started responding to commands in German."
 
 
 
 
 
-theme_sentence = "The narrator discovers that one of their classmates performed a prank on the principal that went out of hand."
+theme_sentence = "The narrator discovers their adopted dog came from a private training program connected to illegal security work."
 
 
 

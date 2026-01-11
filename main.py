@@ -8,6 +8,9 @@ try:
 except FileExistsError:
     print("directory already exists, ignoring")
 
+
+# todo: document this
+
 if "--skip-script-generation" in sys.argv:
     print("Skipping script generation")
 else:
@@ -226,7 +229,7 @@ print("")
 # subprocess.run([sys.executable, "add_subtitles.py", "temp/audio_added.mp4", "temp/output.srt", "temp/subtitles_added.mp4"])
 
 
-subprocess.run(["ffmpeg", "-i", "temp/audio_added.mp4", "-y", "-vf", "subtitles=temp/output.ass:fontsdir=./input", "-c:a", "copy", "-shortest", "-preset", "ultrafast", "-threads", "12", "-crf", "21", "output/output.mp4"])
+subprocess.run(["ffmpeg", "-i", "temp/audio_added.mp4", "-y", "-vf", "subtitles=temp/output.ass:fontsdir=./input", "-c:a", "copy", "-preset", "ultrafast", "-threads", "12", "-crf", "21", "-shortest", "output/output.mp4"])
 
 
 print("")

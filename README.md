@@ -6,6 +6,8 @@ Disclaimer: this project is an experiment and has some AI-generated code
 
 
 # TODO
+- spaces between em dash messes up subtitle alignment
+- trim video to audio
 - some sort of welcome screen with a "generate topics or I already have an idea" choices
 - easy install script
 - thumbnail generator
