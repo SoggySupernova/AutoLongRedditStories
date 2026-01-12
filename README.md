@@ -24,4 +24,5 @@ Disclaimer: this project is an experiment and has some AI-generated code
 
 # Usage Instructions
 1. Read the setup file for your operating system
-2. Run main.py and answer the prompts
+2. [Read the docs!](https://soggysupernova.github.io/autostories/docs)
+3. Run main.py and answer the prompts

@@ -8,7 +8,7 @@ with open("temp/allstory.txt","w") as blank:
     blank.write("")
 
 
-numrounds = 10
+numrounds = 15
 
 def get_last_paragraph(text):
     paragraphs = [p.strip() for p in text.split("\n") if p.strip()]
@@ -30,7 +30,8 @@ Never use any Markdown styling.
 **Story Style**:
 The story should be fiction but plausible—no creepy monsters, fantasy creatures, or impossible environments.
 Do not stray too far from the original theme.
-If the story begins to sound abstract, symbolic, philosophical, or metaphorical, immediately course-correct by returning to concrete actions, dialogue, or physical investigation.
+**Use the current round number and total number of rounds to pace the story.**
+If the story begins to sound abstract, supernatural, or like science fiction, IMMEDIATELY course-correct by returning to concrete actions, dialogue, or physical investigation.
 Do not use any quoted dialogue, instead describe what is being said.
 For example:
 **INSTEAD OF WRITING:** Mr. Henderson said, "I… I was preparing for some routine maintenance!"
@@ -119,9 +120,9 @@ last_paragraph = ""
 
 for round_number in range(1, numrounds + 1):
     if round_number > (numrounds - 2):
-        endingmessage = ": Start wrapping up the story"
+        endingmessage = ": It is almost the end. **PACING (VERY IMPORTANT, TOP PRIORITY): Start wrapping up the story.**"
     if round_number > (numrounds - 1):
-        endingmessage = ": Wrap up the story"
+        endingmessage = ": This is the last round. **PACING (VERY IMPORTANT, TOP PRIORITY): Wrap up the story. (Not a cliffhanger!). WRAP UP THE STORY.**"
 
     if round_number > 1:
         story_prompt = f"""Round {round_number} of {numrounds}{endingmessage}
@@ -135,7 +136,6 @@ Last paragraph of previous segment:
 {last_paragraph}
 
 Continue the story naturally from the last paragraph.
-Do not restate summarized information.
 Let the theme and plot develop over the {numrounds} rounds instead of jumping to the end right away.
 The narrator should not know about the full plot at the beginning.
 """ # indentation is weird
