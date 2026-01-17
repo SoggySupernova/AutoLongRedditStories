@@ -60,13 +60,13 @@ story_user_prompt = ""
 
 
 
-hook_sentence = "The vet asked when my dog started responding to commands in German."
+hook_sentence = "The city sent me a fine for skipping jury duty in a trial I clearly remember serving on."
 
 
 
 
 
-theme_sentence = "The narrator discovers their adopted dog came from a private training program connected to illegal security work."
+theme_sentence = "The narrator investigates a clerical glitch masking a long-running scheme to reuse compliant jurors for sensitive cases."
 
 
 
