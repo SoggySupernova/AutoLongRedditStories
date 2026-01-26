@@ -60,13 +60,13 @@ story_user_prompt = ""
 
 
 
-hook_sentence = "The city sent me a fine for skipping jury duty in a trial I clearly remember serving on."
+hook_sentence = "My therapist asked why I stopped coming to sessions two months ago. I’ve been there every week."
 
 
 
 
 
-theme_sentence = "The narrator investigates a clerical glitch masking a long-running scheme to reuse compliant jurors for sensitive cases."
+theme_sentence = "Appointment logs reveal overlapping entries, exposing a billing fraud operation using duplicated patient identities."
 
 
 

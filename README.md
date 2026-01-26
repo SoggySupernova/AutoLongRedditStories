@@ -12,6 +12,7 @@ Disclaimer: this project is an experiment and has some AI-generated code
 - easy install script
 - thumbnail generator
 - write documentation
+- I think the font actually needs to be an otf, not a ttf
 
 
 
