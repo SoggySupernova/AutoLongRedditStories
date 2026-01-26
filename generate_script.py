@@ -30,6 +30,7 @@ Never use any Markdown styling.
 **Story Style**:
 The story should be fiction but plausible—no creepy monsters, fantasy creatures, or impossible environments.
 Do not stray too far from the original theme.
+It should be first person perspective.
 **Use the current round number and total number of rounds to pace the story.**
 If the story begins to sound abstract, supernatural, or like science fiction, IMMEDIATELY course-correct by returning to concrete actions, dialogue, or physical investigation.
 Do not use any quoted dialogue, instead describe what is being said.
