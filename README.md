@@ -1,7 +1,6 @@
 # AutoLongRedditStories
-Automate those annoying AI-narrated Reddit stories with minecraft parkour in the background<br/>
-
-Disclaimer: this project is an experiment and has some AI-generated code
+Automate those annoying AI-narrated Reddit stories with minecraft parkour in the background<br/><br>
+**Percentage of AI-generated code: ~40%**
 
 
 

@@ -40,7 +40,7 @@ from pathlib import Path
 
 
 scriptfile = open("temp/allstory.txt","r")
-script = scriptfile.read()
+script = scriptfile.read().replace(" –", "–") # Fix spaces between em dashes
 scriptfile.close()
 
 

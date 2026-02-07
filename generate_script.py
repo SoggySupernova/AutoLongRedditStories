@@ -61,13 +61,13 @@ story_user_prompt = ""
 
 
 
-hook_sentence = "My therapist asked why I stopped coming to sessions two months ago. I’ve been there every week."
+hook_sentence = "My new phone keeps unlocking with my face—while it’s on the table."
 
 
 
 
 
-theme_sentence = "Appointment logs reveal overlapping entries, exposing a billing fraud operation using duplicated patient identities."
+theme_sentence = "The story starts with the narrator explaining how their phone keeps unlocking while it's on the table. They slowly discover that a flawed facial recognition update ties into a startup harvesting biometric data through consumer devices."
 
 
 
@@ -137,8 +137,10 @@ Last paragraph of previous segment:
 {last_paragraph}
 
 Continue the story naturally from the last paragraph.
+Do not repeat the last paragraph of the story.
 Let the theme and plot develop over the {numrounds} rounds instead of jumping to the end right away.
 The narrator should not know about the full plot at the beginning.
+NO SUPERNATURAL EVENTS. STICK TO THE OVERALL PLOT ({theme_sentence})
 """ # indentation is weird
 
 
