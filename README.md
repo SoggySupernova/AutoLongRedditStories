@@ -5,9 +5,10 @@ Automate those annoying AI-narrated Reddit stories with minecraft parkour in the
 
 
 # TODO
-- spaces between em dash messes up subtitle alignment
 - trim video to audio
 - some sort of welcome screen with a "generate topics or I already have an idea" choices
+- randomize video start point
+- document command line arguments
 - easy install script
 - thumbnail generator
 - write documentation

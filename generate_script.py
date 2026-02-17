@@ -33,24 +33,35 @@ Do not stray too far from the original theme.
 It should be first person perspective.
 **Use the current round number and total number of rounds to pace the story.**
 If the story begins to sound abstract, supernatural, or like science fiction, IMMEDIATELY course-correct by returning to concrete actions, dialogue, or physical investigation.
-Do not use any quoted dialogue, instead describe what is being said.
-For example:
-**INSTEAD OF WRITING:** Mr. Henderson said, "I… I was preparing for some routine maintenance!"
-**YOU CAN WRITE:** Mr. Henderson said he was only preparing for some routine mainenance.
 
 """
 
+
+
+
+
+
+
+hook_sentence = "My childhood home is for sale. The listing photos show a locked door I’ve never seen before."
+theme_sentence = "The story starts with the narrator seeing their old childhood home from 20 years ago on sale, but the photos show a locked door that the narrator's never seen before. The narrator revisits the house and discovers a concealed room behind the basement shelving. Inside are detailed journals written by someone documenting the family’s routines. The entries stop abruptly the night the narrator moved out. Later in the story (maybe round 8), they file a police report that results in an unexpected encounter with the writer of the journals."
+
+
+
+
+
 # System prompt for summary update
-summary_system_prompt = """
-You are a story summarizer. Using the existing summary and the new story segment, update the summary to approximately 200 words.
+summary_system_prompt = f"""
+You are a story summarizer. Using the existing summary and the new story segment, update the summary to approximately 100 words.
 
 * If no prior summary exists, create a new one (~100 words).
 * Use bullet points.
+* Be as concise as possible.
 * **MOST IMPORTANT**: Only add or modify information based on the new segment; **do not replace the summary with a recap of the new segment.**
 * Remove information only if needed to keep the summary within length, and remove only nonessential details.
 * Do not invent details beyond the provided text.
 * Include specific names, objects, events, and unresolved plot threads.
 * Focus on essential plot progression, character developments, and continuity-critical details.
+* Also keep in mind the plot sentence: {theme_sentence}
 
 Respond with the summary only. Do not add commentary or generate new story content.
 """
@@ -61,13 +72,13 @@ story_user_prompt = ""
 
 
 
-hook_sentence = "My new phone keeps unlocking with my face—while it’s on the table."
 
 
 
 
 
-theme_sentence = "The story starts with the narrator explaining how their phone keeps unlocking while it's on the table. They slowly discover that a flawed facial recognition update ties into a startup harvesting biometric data through consumer devices."
+
+
 
 
 
@@ -96,7 +107,7 @@ def stream_ollama(system, user_prompt):
         ],
         "stream": True,
         "options": options,
-        "keep_alive": 100
+        "keep_alive": 1000
     }
 
     response = requests.post(url, json=data, stream=True)
@@ -140,7 +151,8 @@ Continue the story naturally from the last paragraph.
 Do not repeat the last paragraph of the story.
 Let the theme and plot develop over the {numrounds} rounds instead of jumping to the end right away.
 The narrator should not know about the full plot at the beginning.
-NO SUPERNATURAL EVENTS. STICK TO THE OVERALL PLOT ({theme_sentence})
+DO NOT REVEAL THE ENTIRE PLOT IN THE FIRST FEW ROUNDS.
+NO SUPERNATURAL EVENTS OR SCI-FI TECHNOLOGY. STICK TO THE OVERALL PLOT ({theme_sentence})
 """ # indentation is weird
 
 

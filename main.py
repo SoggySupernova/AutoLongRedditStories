@@ -9,7 +9,7 @@ except FileExistsError:
     print("directory already exists, ignoring")
 
 
-# todo: document this
+
 
 if "--skip-script-generation" in sys.argv:
     print("Skipping script generation")
@@ -23,7 +23,10 @@ print("================================")
 print("Generating TTS...")
 print("================================")
 print("")
-print("Loading model...")
+if "--skip-tts" in sys.argv:
+    print("Skipping TTS")
+else:
+    print("Loading model...")
 from chatterbox.tts_turbo import ChatterboxTurboTTS
 import torchaudio as ta
 import torch
@@ -33,10 +36,13 @@ from pathlib import Path
 
 
 
+# todo: document this
 
-
-# Remove old TTS snippets
-[f.unlink() for f in Path("temp/tts_snippets").glob("*") if f.is_file()]
+if "--skip-tts" in sys.argv:
+    print("Keeping TTS snippets...")
+else:
+    # Remove old TTS snippets
+    [f.unlink() for f in Path("temp/tts_snippets").glob("*") if f.is_file()]
 
 
 scriptfile = open("temp/allstory.txt","r")
@@ -82,7 +88,10 @@ def split_into_groups(text, min_words=10):
 
 
 # Load the Turbo model
-model = ChatterboxTurboTTS.from_pretrained(device="cpu")
+if "--skip-tts" in sys.argv:
+    print("Skipping TTS model loading")
+else:
+    model = ChatterboxTurboTTS.from_pretrained(device="cpu")
 
 
 def generate_audio(text, outputfile):
@@ -91,16 +100,17 @@ def generate_audio(text, outputfile):
     # wav = model.generate(text)
     ta.save(outputfile, wav, model.sr)
 
-
-
-result = split_into_groups(script)
-print("")
-print(f"Total number of groups: {len(result)}. Estimated time {len(result)*10}sec")
-for i, group in enumerate(result, 1):
+if "--skip-tts" in sys.argv:
+    print("Skipping TTS generation")
+else:
+    result = split_into_groups(script)
     print("")
-    print(f"Group {i}/{len(result)}: {len(group.split())} words")
-    print(group)
-    generate_audio(group, f"temp/tts_snippets/{i}_generated.wav")
+    print(f"Total number of groups: {len(result)}. Estimated time {len(result)*10}sec")
+    for i, group in enumerate(result, 1):
+        print("")
+        print(f"Group {i}/{len(result)}: {len(group.split())} words")
+        print(group)
+        generate_audio(group, f"temp/tts_snippets/{i}_generated.wav")
 
 
 
@@ -157,16 +167,18 @@ def combineaudio():
     merged.export(OUTPUT_FILE, format="wav")
     print(f"\nMerged file written to: {OUTPUT_FILE}")
 
-
-combineaudio()
-
-
-
-
+if "--skip-tts" in sys.argv:
+    print("Using previous merged audio")
+else:
+    combineaudio()
 
 
 
-# speed up audio by 10% (the slower audio works better with the TTS)
+
+
+
+
+# speed up audio by 10% (the slower audio works better with the TTS) (Is not skipped by --skip-tts)
 print("")
 print("================================")
 print("Speeding up audio...")
@@ -201,7 +213,10 @@ print("")
 # Old aeneas method:
 # subprocess.run(["wsl", "-e", "bash", "-c", "\"./align_subtitles.sh\""])
 
-subprocess.run([sys.executable, "align_subtitles.py"]) # Todo: do this in chunks if needed
+if "--skip-subtitle-alignment" in sys.argv:
+    print("Skipping subtitle alignment")
+else:
+    subprocess.run([sys.executable, "align_subtitles.py"]) # Todo: do this in chunks if needed
 
 
 
