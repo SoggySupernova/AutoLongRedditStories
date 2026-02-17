@@ -1,4 +1,4 @@
 requests
-chatterbox-tts
+chatterbox-tts==0.1.6
 moviepy==1.0.3
 git+https://github.com/MahmoudAshraf97/ctc-forced-aligner.git

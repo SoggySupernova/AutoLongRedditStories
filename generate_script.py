@@ -2,10 +2,10 @@ import requests
 import json
 import os
 
-
 # clear previous story
 with open("temp/allstory.txt","w") as blank:
     blank.write("")
+
 
 
 numrounds = 15

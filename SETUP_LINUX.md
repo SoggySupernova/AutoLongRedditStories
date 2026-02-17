@@ -1,6 +1,6 @@
 # Prerequisites
 ---
-Tested on Python 3.10.0 and pip 23.0.1. If something breaks, try installing these specific versions!
+Tested on Python 3.10 and uv 0.10.3. If something breaks, try installing these specific versions!
 ---
 You need ffmpeg and ollama correctly installed and configured. You need to download a specific LLM as well:
 ```shell
@@ -13,34 +13,32 @@ actually i lied its gemma3:4b
 
 
 
-1. Install the python install manager (py)
 
-2. Clone and navigate to this repository
+1. Clone and navigate to this repository
 
-3. in regular cmd window, not powershell:
+2. Type these commands:
 ```
-py install 3.10
-py -3.10 -m venv chatter
-.\chatter\Scripts\activate.bat
-pip install -r requirements.txt
+uv venv chatter --python 3.10
+source chatter/bin/activate.fish # may be .sh or something else
+uv pip install -r requirements.txt
 ```
-(environment variables are stupid)
+There may be errors about missing setuptools or numpy, try installing those then running uv pip install -r requirements.txt --no-build-isolation
 ## Install PyTorch
 NVIDIA GPU
 ```
 # Install pytorch with your CUDA version, e.g.
-pip install torch==2.6.0+cu124 torchaudio==2.6.0+cu124 --extra-index-url https://download.pytorch.org/whl/cu124
+uv pip install torch==2.6.0+cu124 torchaudio==2.6.0+cu124 --extra-index-url https://download.pytorch.org/whl/cu124
 ```
 AMD GPU (not tested)
 ```
 # Install pytorch with your ROCm version (Linux only), e.g.
-pip install torch==2.5.1+rocm6.2 torchaudio==2.5.1+rocm6.2 --extra-index-url https://download.pytorch.org/whl/rocm6.2
+uv pip install torch==2.5.1+rocm6.2 torchaudio==2.5.1+rocm6.2 --extra-index-url https://download.pytorch.org/whl/rocm6.2
 ```
 Intel GPU (not tested)
 ```
 # Install pytorch with your XPU version, e.g.
 # Intel® Deep Learning Essentials or Intel® oneAPI Base Toolkit must be installed
-pip install torch torchaudio --index-url https://download.pytorch.org/whl/test/xpu
+uv pip install torch torchaudio --index-url https://download.pytorch.org/whl/test/xpu
 
 # Intel GPU support is also available through IPEX (Intel® Extension for PyTorch)
 # IPEX does not require the Intel® Deep Learning Essentials or Intel® oneAPI Base Toolkit
@@ -49,7 +47,7 @@ pip install torch torchaudio --index-url https://download.pytorch.org/whl/test/x
 Apple Silicon (not tested)
 ```
 # Install the stable pytorch, e.g.
-pip install torch torchaudio
+uv pip install torch torchaudio
 ```
 
 

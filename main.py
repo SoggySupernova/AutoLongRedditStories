@@ -1,12 +1,22 @@
 import subprocess
 import sys
 import os
+
 try:
     os.mkdir("input")
-    os.mkdir("output")
-    os.mkdirs("temp/tts_snippets")
 except FileExistsError:
     print("directory already exists, ignoring")
+
+try:
+    os.mkdir("output")
+except FileExistsError:
+    print("ignoring again")
+
+
+try:
+    os.makedirs("temp/tts_snippets")
+except FileExistsError:
+    print("Ignoring for the last time")
 
 
 
