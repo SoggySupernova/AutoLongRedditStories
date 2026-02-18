@@ -43,7 +43,7 @@ If the story begins to sound abstract, supernatural, or like science fiction, IM
 
 
 hook_sentence = "My childhood home is for sale. The listing photos show a locked door I’ve never seen before."
-theme_sentence = "The story starts with the narrator seeing their old childhood home from 20 years ago on sale, but the photos show a locked door that the narrator's never seen before. The narrator revisits the house and discovers a concealed room behind the basement shelving. Inside are detailed journals written by someone documenting the family’s routines. The entries stop abruptly the night the narrator moved out. Later in the story (maybe round 8), they file a police report that results in an unexpected encounter with the writer of the journals."
+theme_sentence = "The story starts with the narrator seeing their old childhood home from 20 years ago on sale, but the photos show a locked door that the narrator's never seen before. The narrator revisits the house and discovers a concealed room behind the basement shelving. Inside are detailed journals written by someone documenting the family’s routines. The entries stop abruptly the night the narrator moved out. Later in the story (maybe round 8), they file a police report that results in an unexpected encounter with the writer of the journals who had been secretly living in their house ever since the family moved in."
 
 
 
@@ -152,7 +152,8 @@ Do not repeat the last paragraph of the story.
 Let the theme and plot develop over the {numrounds} rounds instead of jumping to the end right away.
 The narrator should not know about the full plot at the beginning.
 DO NOT REVEAL THE ENTIRE PLOT IN THE FIRST FEW ROUNDS.
-NO SUPERNATURAL EVENTS OR SCI-FI TECHNOLOGY. STICK TO THE OVERALL PLOT ({theme_sentence})
+NO SUPERNATURAL EVENTS OR SCI-FI TECHNOLOGY. STICK TO THE OVERALL PLOT ({theme_sentence}).
+THE PLOT SENTENCE ABOVE OVERRIDES ALL PREVIOUS PLOT LINES. IT IS **IMPERATIVE** THAT YOU STICK TO THE PLOT.
 """ # indentation is weird
 
 

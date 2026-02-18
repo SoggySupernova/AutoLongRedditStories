@@ -4,8 +4,7 @@ Tested on Python 3.10 and uv 0.10.3. If something breaks, try installing these s
 ---
 You need ffmpeg and ollama correctly installed and configured. You need to download a specific LLM as well:
 ```shell
-ollama pull ministral-3:8b-instruct-2512-q4_K_M
-actually i lied its gemma3:4b
+ollama pull gemma3:4b
 ```
 
 
