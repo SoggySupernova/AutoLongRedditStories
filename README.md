@@ -5,14 +5,12 @@ Automate those annoying AI-narrated Reddit stories with minecraft parkour in the
 
 
 # TODO
-- trim video to audio
 - some sort of welcome screen with a "generate topics or I already have an idea" choices
 - randomize video start point
-- document command line arguments
+- fix font needs to be called Monsterrat-Bold
 - easy install script
 - thumbnail generator
 - write documentation
-- I think the font actually needs to be an otf, not a ttf
 
 
 

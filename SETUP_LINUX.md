@@ -14,9 +14,11 @@ actually i lied its gemma3:4b
 
 
 
-1. Clone and navigate to this repository
+1. Clone and navigate to this repository.
 
-2. Type these commands:
+2. Follow the instructions in tts_turbo.py.
+
+3. Type these commands:
 ```
 uv venv chatter --python 3.10
 source chatter/bin/activate.fish # may be .sh or something else

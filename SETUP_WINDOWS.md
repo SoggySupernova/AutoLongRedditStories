@@ -13,11 +13,13 @@ actually i lied its gemma3:4b
 
 
 
-1. Install the python install manager (py)
+1. Install the python install manager (py).
 
-2. Clone and navigate to this repository
+2. Clone and navigate to this repository.
 
-3. in regular cmd window, not powershell:
+3. Follow the instructions in tts_turbo.py.
+
+4. In regular cmd window, not powershell:
 ```
 py install 3.10
 py -3.10 -m venv chatter

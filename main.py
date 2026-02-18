@@ -238,7 +238,7 @@ print("Preparing video...")
 print("================================")
 print("")
 subprocess.run(["ffmpeg", "-ss", "00:01:00", "-to", "00:30:00", "-i", "input/source.mkv", "-c", "copy", "-y", "-avoid_negative_ts", "make_zero", "temp/trimmed.mp4"]) # todo: trim based on length of audio
-subprocess.run(["ffmpeg", "-i", "temp/trimmed.mp4", "-i", "temp/spedup.wav", "-y", "-c:v", "copy", "-c:a", "aac", "-strict", "experimental", "temp/audio_added.mp4"])
+subprocess.run(["ffmpeg", "-i", "temp/trimmed.mp4", "-i", "temp/spedup.wav", "-y", "-c:v", "copy", "-c:a", "aac", "-shortest", "temp/audio_added.mp4"])
 
 # add captions to the video
 print("")

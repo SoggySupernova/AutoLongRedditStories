@@ -164,7 +164,7 @@ def json_to_srt(
             f.write(f"{item['text']}\n\n")
 
 
-json_to_srt(word_timestamps, "temp/output.srt", speed_multiplier=1.1) # 1.15 works better for short snippets for some reason
+json_to_srt(word_timestamps, "temp/output.srt", speed_multiplier=1.1) # 1.15 works better for shorter snippets for some reason
 
 
 
