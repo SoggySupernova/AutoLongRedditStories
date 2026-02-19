@@ -1,7 +1,10 @@
-print("Loading model...")
+import sys
+
+print("Loading torch...")
 
 import torch
 
+print("Loading model...")
 from ctc_forced_aligner import (
     load_audio,
     load_alignment_model,
@@ -12,24 +15,74 @@ from ctc_forced_aligner import (
     postprocess_results,
 )
 
+
 audio_path = "temp/merged.wav" # Use non-sped up version for stability, speed back up later
 text_path = "temp/subtitles.txt"
 language = "iso" # ISO-639-3 Language code
-device = "cuda" if torch.cuda.is_available() else "cpu"
-batch_size = 16
+batch_size = 8 # 4gb of vram in the big 26 🥀
 
 
-alignment_model, alignment_tokenizer = load_alignment_model(
-    device,
-    dtype=torch.float16 if device == "cuda" else torch.float32,
-)
+def load_model_with_fallback():
+    device = "cuda" if torch.cuda.is_available() else "cpu"
 
+    try:
+        print(f"Trying to load model on {device}...")
+        model, tokenizer = load_alignment_model(
+            device,
+            dtype=torch.float16 if device == "cuda" else torch.float32,
+        )
+        return model, tokenizer, device
+
+    except RuntimeError as e:
+        if "out of memory" in str(e).lower() and device == "cuda":
+            print("CUDA out of memory. Falling back to CPU...")
+            torch.cuda.empty_cache()
+
+            device = "cpu"
+            model, tokenizer = load_alignment_model(
+                device,
+                dtype=torch.float32,
+            )
+            return model, tokenizer, device
+        raise
+
+
+alignment_model, alignment_tokenizer, device = load_model_with_fallback()
 
 print("Loading audio...")
 audio_waveform = load_audio(audio_path, alignment_model.dtype, alignment_model.device)
 print("Loaded")
 
-import sys
+print("\n\n\nProcessing... This may take a while.")
+
+try:
+    emissions, stride = generate_emissions(
+        alignment_model,
+        audio_waveform,
+        batch_size=batch_size,
+    )
+
+except RuntimeError as e:
+    if "out of memory" in str(e).lower() and device == "cuda":
+        print("CUDA out of memory. Retrying on CPU...")
+        torch.cuda.empty_cache()
+
+        # Move model + audio to CPU
+        alignment_model = alignment_model.to("cpu")
+        audio_waveform = audio_waveform.to("cpu")
+
+        emissions, stride = generate_emissions(
+            alignment_model,
+            audio_waveform,
+            batch_size=1,  # safer on CPU
+        )
+    else:
+        raise
+
+
+
+
+
 
 # Translation table for smart quotes
 SMART_QUOTES = {
@@ -63,13 +116,12 @@ text = normalize_text(text).replace('\u2026','...').replace('*','') # I've tried
 print(text)
 
 print("\n\n\n")
-print("Processing... This will take a while.")
 
 
 
 
 
-emissions, stride = generate_emissions(alignment_model, audio_waveform, batch_size=batch_size)
+
 
 
 
