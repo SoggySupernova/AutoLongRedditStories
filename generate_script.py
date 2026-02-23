@@ -71,8 +71,8 @@ If the story begins to sound abstract, supernatural, or like science fiction, IM
 
 
 
-hook_sentence = "My childhood home is for sale. The listing photos show a locked door I’ve never seen before."
-theme_sentence = "The narrator sees their old childhood home from 20 years ago on sale, but the photos show a locked door that the narrator's never seen before."
+hook_sentence = "My old teacher emailed me after ten years: ‘You were right to be suspicious about that field trip."
+theme_sentence = "The narrator revisits a strange school trip that may have been part of a private research trial."
 more_detailed_theme_sentence = "The story starts with the narrator seeing their old childhood home from 20 years ago on sale, but the photos show a locked door that the narrator's never seen before. The narrator revisits the house and discovers a concealed room behind the basement shelving. Inside are detailed journals written by someone documenting the family’s routines. The entries stop abruptly the night the narrator moved out. They file a police report that results in an unexpected encounter with the writer of the journals who had been secretly living in their house ever since the family moved in."
 
 
