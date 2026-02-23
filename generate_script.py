@@ -46,24 +46,7 @@ def get_last_paragraph(text):
     return paragraphs[-1] if paragraphs else ""
 
 
-# System prompt for story generation
-story_system_prompt = """You are a long-form story generator.
 
-**Response Formatting:**
-Generate a coherent story segment of about 500 words.
-Do NOT include the summary in the story.
-Respond ONLY with the new segment of the story.
-Do not repeat the previous part of the story in your response.
-Never use any Markdown styling.
-
-
-**Story Style**:
-The story should be fiction but plausible—no creepy monsters, fantasy creatures, or impossible environments.
-Do not stray too far from the original theme.
-It should be in the first person perspective.
-If the story begins to sound abstract, supernatural, or like science fiction, IMMEDIATELY course-correct by returning to concrete actions, dialogue, or physical investigation.
-
-"""
 
 
 
@@ -73,8 +56,89 @@ If the story begins to sound abstract, supernatural, or like science fiction, IM
 
 hook_sentence = "My old teacher emailed me after ten years: ‘You were right to be suspicious about that field trip."
 theme_sentence = "The narrator revisits a strange school trip that may have been part of a private research trial."
-more_detailed_theme_sentence = "The story starts with the narrator seeing their old childhood home from 20 years ago on sale, but the photos show a locked door that the narrator's never seen before. The narrator revisits the house and discovers a concealed room behind the basement shelving. Inside are detailed journals written by someone documenting the family’s routines. The entries stop abruptly the night the narrator moved out. They file a police report that results in an unexpected encounter with the writer of the journals who had been secretly living in their house ever since the family moved in."
 
+
+# -------------------------------------------------------------------------------------
+# Story Expander
+
+print("\n====================")
+print("Turning hook sentences into a plot...")
+print("====================\n")
+
+# more_detailed_theme_sentence = "The story starts with the narrator seeing their old childhood home from 20 years ago on sale, but the photos show a locked door that the narrator's never seen before. The narrator revisits the house and discovers a concealed room behind the basement shelving. Inside are detailed journals written by someone documenting the family’s routines. The entries stop abruptly the night the narrator moved out. They file a police report that results in an unexpected encounter with the writer of the journals who had been secretly living in their house ever since the family moved in."
+
+story_expander_prompt = f"""
+You are a writing assistant that expands minimal story inputs into a clear, multi-sentence narrative summary.
+
+**Goal**
+Transform a short hook sentence and a one-line intro into a concise story summary that includes logical progression, rising tension, and a resolution or twist.
+
+**Output Requirements**
+
+1. Write a single paragraph of **4–7 sentences**.
+2. The **first sentence must incorporate the premise** from the one-line intro.
+3. Use the **hook as the central mystery or inciting element**.
+4. Expand the situation into plausible plot development:
+
+   * escalation
+   * discovery or complication
+   * consequences
+5. End with a **clear outcome, reveal, or twist**.
+6. Do not repeat the hook verbatim unless it fits naturally.
+7. Keep the tone similar to a short story synopsis or back-cover summary.
+8. Avoid dialogue and avoid meta commentary about writing.
+
+**Style Guidelines**
+
+* Write in present tense, using "the narrator" or "they" to refer to the main character.
+* Maintain internal logic between events.
+* Introduce specific but concise details (locations, objects, actions).
+* Avoid filler or generic phrasing.
+* Keep the length roughly **90 words**.
+
+**Process**
+
+1. Identify the core premise from the intro.
+2. Identify the intrigue or tension from the hook.
+3. Imagine a plausible chain of events that connects them.
+4. Conclude with a meaningful development or reveal.
+
+**Output Format**
+Return only the final paragraph summary. No explanations.
+
+
+
+
+Remember: YOU ARE NOT WRITING THE STORY. YOU ARE SIMPLY EXPANDING THE SUMMARY. FOLLOW THE EXAMPLE BELOW.
+
+# Example Response
+
+Input
+Hook sentence: "My childhood home is for sale. The listing photos show a locked door I’ve never seen before."
+One-line intro: "The narrator sees their old childhood home from 20 years ago on sale, but the photos show a locked door that the narrator's never seen before."
+
+Output
+The story starts with the narrator seeing their old childhood home from 20 years ago on sale, but the photos show a locked door that the narrator's never seen before. The narrator revisits the house and discovers a concealed room behind the basement shelving. Inside are detailed journals written by someone documenting the family’s routines. The entries stop abruptly the night the narrator moved out. They file a police report that results in an unexpected encounter with the writer of the journals who had been secretly living in their house ever since the family moved in.
+
+
+Here is the hook sentence and one-line intro:
+"""
+
+story_expander_user_prompt = f"""
+Hook sentence: {hook_sentence}
+One-line intro: {theme_sentence}
+"""
+print(story_expander_user_prompt)
+more_detailed_theme_sentence = stream_ollama(story_expander_prompt, story_expander_user_prompt)
+
+
+
+# -------------------------------------------------------------------------------------
+# Plot Beat Generator
+
+print("\n====================")
+print("Turning plot into list of events...")
+print("====================\n")
 
 plot_beats_prompt = f"""
 You are a story structure engine.
@@ -88,7 +152,8 @@ Requirements:
 * The story should not be abstract, supernatural, or science fiction. It should be plasible in real life.
 * Maintain genre consistency implied by the premise.
 * Ensure logical cause-and-effect progression between beats.
-* Your goal is to create wide, consequential, story-shifting beats — not micro-actions, filler transitions, or repetitive exploration steps. Each beat should be its **own moment in time**.
+* Your goal is to create wide, consequential, story-shifting beats — not micro-actions, filler transitions, or repetitive exploration steps.
+* **Very Important**: Each beat should be its **own moment in time**. For example, do not introduce an item in one plot beat and describe it further in another plot beat.
 * The final beat must close the arc rather than end ambiguously (unless ambiguity is inherent to the theme).
 * **YOU SHOULD NOT BE WRITING A STORY, JUST A PLOT FOR A STORY.**
 
@@ -127,7 +192,12 @@ plot_beats = {
 }
 """
 
+# -------------------------------------------------------------------------------------
+# Story Generator
 
+print("\n====================")
+print("Generating story based on list of events...")
+print("====================\n")
 
 # System prompt for summary update
 summary_system_prompt = f"""
@@ -151,7 +221,24 @@ story_user_prompt = ""
 
 
 
+# System prompt for story generation
+story_system_prompt = """You are a long-form story generator.
 
+**Response Formatting:**
+Generate a coherent story segment of about 500 words.
+Do NOT include the summary in the story.
+Respond ONLY with the new segment of the story.
+Do not repeat the previous part of the story in your response.
+Never use any Markdown styling.
+
+
+**Story Style**:
+The story should be fiction but plausible—no creepy monsters, fantasy creatures, or impossible environments.
+Do not stray too far from the original theme.
+It should be in the first person perspective.
+If the story begins to sound abstract, supernatural, or like science fiction, IMMEDIATELY course-correct by returning to concrete actions, dialogue, or physical investigation.
+
+"""
 
 
 

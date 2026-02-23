@@ -6,8 +6,8 @@ Automate those annoying AI-narrated Reddit stories with minecraft parkour in the
 
 # TODO
 - some sort of welcome screen with a "generate topics or I already have an idea" choices
+- fix tts getting cut off in the middle of "Dr. *"
 - randomize video start point
-- fix font needs to be called Monsterrat-Bold
 - easy install script
 - thumbnail generator
 - write documentation
