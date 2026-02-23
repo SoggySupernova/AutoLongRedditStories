@@ -69,7 +69,8 @@ def split_into_groups(text, min_words=10):
     words, and no group is longer than necessary.
     """
     # Basic sentence splitting (., ?, ! followed by whitespace)
-    sentences = re.split(r'(?<=[.!?])\s+', text.strip())
+    sentences = re.split(r'(?<!\bDr\.)(?<!\bMr\.)(?<!\bMs\.)(?<!\bMrs\.)(?<!\bProf\.)(?<=[.!?])\s+', text.strip())
+    # Experimental regex
 
     groups = []
     current_group = []
