@@ -54,7 +54,7 @@ def get_last_paragraph(text):
 
 
 
-hook_sentence = "My old teacher emailed me after ten years: ‘You were right to be suspicious about that field trip."
+hook_sentence = "My old teacher emailed me after ten years: 'You were right to be suspicious about that field trip.'"
 theme_sentence = "The narrator revisits a strange school trip that may have been part of a private research trial."
 
 

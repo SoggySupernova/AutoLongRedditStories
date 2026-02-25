@@ -1,31 +1,55 @@
 import subprocess
 import sys
 import os
+import time
 
+print("Setting up folders...")
 try:
     os.mkdir("input")
 except FileExistsError:
-    print("directory already exists, ignoring")
+    print("input directory already exists, ignoring.")
 
 try:
     os.mkdir("output")
 except FileExistsError:
-    print("ignoring again")
+    print("output directory already exists, ignoring.")
 
 
 try:
     os.makedirs("temp/tts_snippets")
 except FileExistsError:
-    print("Ignoring for the last time")
+    print("temp directory already exists, ignoring.")
 
 
+
+
+print("\nWelcome to AutoLongRedditStories!")
+print("Loading...")
+time.sleep(0.8) # arbitrary time delay to make it feel like it's doing something. It's all about the pyschology you know
+
+
+def gen_script():
+    try:
+        subprocess.run(
+            [sys.executable, "generate_script.py"],
+            check=True,           # raises CalledProcessError on non‑zero exit
+        )
+    except subprocess.CalledProcessError as e:
+        print(f"Child failed with code {e.returncode}", file=sys.stderr)
+        print("\n\n\n\nThis is most likely because Ollama is not running. Try running 'ollama serve' or 'sudo systemctl enable --now ollama' in a separate window.")
+        sys.exit(e.returncode)   # stop parent script
+
+
+print("================================")
+print("Generating script...")
+print("================================")
 
 
 if "--skip-script-generation" in sys.argv:
     print("Skipping script generation")
 else:
     # Generate script, run venv python
-    subprocess.run([sys.executable, "generate_script.py"])
+    gen_script()
 
 
 print("")
@@ -254,8 +278,11 @@ print("")
 # old slow method
 # subprocess.run([sys.executable, "add_subtitles.py", "temp/audio_added.mp4", "temp/output.srt", "temp/subtitles_added.mp4"])
 
-
-subprocess.run(["ffmpeg", "-i", "temp/audio_added.mp4", "-y", "-vf", "subtitles=temp/output.ass:fontsdir=./input", "-c:a", "copy", "-preset", "ultrafast", "-threads", "12", "-crf", "21", "-shortest", "output/output.mp4"])
+if "--no-overwrite-output" in sys.argv:
+    subprocess.run(["ffmpeg", "-i", "temp/audio_added.mp4", "-y", "-vf", "subtitles=temp/output.ass:fontsdir=./input", "-c:a", "copy", "-preset", "ultrafast", "-threads", "12", "-crf", "21", "-shortest", "output/temp.mp4"])
+else:
+    # subprocess.run(["ffmpeg", "-i", "temp/audio_added.mp4", "-y", "-vf", "subtitles=temp/output.ass:fontsdir=./input", "-c:a", "copy", "-preset", "ultrafast", "-threads", "12", "-crf", "21", "-shortest", "output/output.mp4"])
+    print("Overwriting output warning!")
 
 
 print("")

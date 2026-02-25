@@ -5,12 +5,16 @@ Automate those annoying AI-narrated Reddit stories with minecraft parkour in the
 
 
 # TODO
+- error handling
+- automatically detect font name from file ✅
 - some sort of welcome screen with a "generate topics or I already have an idea" choices
-- fix tts getting cut off in the middle of "Dr. *"
+- fix tts getting cut off in the middle of "Dr. *" (Todo: TEST!)
 - randomize video start point
 - easy install script
-- thumbnail generator
+- thumbnail generator!
+- shorts generator!
 - write documentation
+- Disallow overused names: Blackwood, Elias, Thorne, Davies
 
 
 

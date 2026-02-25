@@ -235,15 +235,25 @@ import sys
 import re
 from pathlib import Path
 
+from fontTools import ttLib
 
-ASS_HEADER = """[Script Info]
+def get_font_family_name(path: str) -> str | None:
+    font = ttLib.TTFont(path)
+    # nameID 1 = Font Family name
+    return font["name"].getDebugName(1)
+
+fintname = get_font_family_name("input/font.otf") # misspelling intentional
+print(f"Font name: {fintname}")
+
+
+ASS_HEADER = f"""[Script Info]
 ScriptType: v4.00+
 PlayResX: 1920
 PlayResY: 1080
 
 [V4+ Styles]
 Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
-Style: Default,Montserrat-Bold,150,&H00FFFFFF,&H000000FF,&H00000000,&H00000000,0,0,0,0,100,100,0,0,1,10,0,5,0,0,0,1
+Style: Default,{fintname},150,&H00FFFFFF,&H000000FF,&H00000000,&H00000000,0,0,0,0,100,100,0,0,1,10,0,5,0,0,0,1
 
 [Events]
 Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
