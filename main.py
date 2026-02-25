@@ -281,7 +281,7 @@ print("")
 if "--no-overwrite-output" in sys.argv:
     subprocess.run(["ffmpeg", "-i", "temp/audio_added.mp4", "-y", "-vf", "subtitles=temp/output.ass:fontsdir=./input", "-c:a", "copy", "-preset", "ultrafast", "-threads", "12", "-crf", "21", "-shortest", "output/temp.mp4"])
 else:
-    # subprocess.run(["ffmpeg", "-i", "temp/audio_added.mp4", "-y", "-vf", "subtitles=temp/output.ass:fontsdir=./input", "-c:a", "copy", "-preset", "ultrafast", "-threads", "12", "-crf", "21", "-shortest", "output/output.mp4"])
+    subprocess.run(["ffmpeg", "-i", "temp/audio_added.mp4", "-y", "-vf", "subtitles=temp/output.ass:fontsdir=./input", "-c:a", "copy", "-preset", "ultrafast", "-threads", "12", "-crf", "21", "-shortest", "output/output.mp4"])
     print("Overwriting output warning!")
 
 
