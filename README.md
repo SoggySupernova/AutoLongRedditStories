@@ -14,7 +14,7 @@ Automate those annoying AI-narrated Reddit stories with minecraft parkour in the
 - thumbnail generator!
 - shorts generator!
 - write documentation
-- Disallow overused names: Blackwood, Elias, Thorne, Davies, Silas, Finch
+- Disallow overused names: Blackwood, Elias, Thorne, Davies, Silas, Finch ✅
 
 
 
