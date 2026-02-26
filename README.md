@@ -5,7 +5,7 @@ Automate those annoying AI-narrated Reddit stories with minecraft parkour in the
 
 
 # TODO
-- error handling
+- error handling ✅
 - automatically detect font name from file ✅
 - some sort of welcome screen with a "generate topics or I already have an idea" choices
 - fix tts getting cut off in the middle of "Dr. *" ✅
