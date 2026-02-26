@@ -140,6 +140,8 @@ if "--skip-tts" in sys.argv:
 else:
     result = split_into_groups(script)
     print("")
+    for a in result:
+        print(a)
     print(f"Total number of groups: {len(result)}. Estimated time {len(result)*10}sec")
     for i, group in enumerate(result, 1):
         print("")

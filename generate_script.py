@@ -95,6 +95,7 @@ Transform a short hook sentence and a one-line intro into a concise story summar
 * Introduce specific but concise details (locations, objects, actions).
 * Avoid filler or generic phrasing.
 * Keep the length roughly **90 words**.
+* Never EVER use the names Blackwood, Elias, Thorne, Davies, Silas, or Finch to refer to ANYTHING. If you already have, switch it and do not continue using the name.
 
 **Process**
 
@@ -155,6 +156,7 @@ Requirements:
 * Your goal is to create wide, consequential, story-shifting beats — not micro-actions, filler transitions, or repetitive exploration steps.
 * **Very Important**: Each beat should be its **own moment in time**. For example, do not introduce an item in one plot beat and describe it further in another plot beat.
 * The final beat must close the arc rather than end ambiguously (unless ambiguity is inherent to the theme).
+* Never EVER use the names Blackwood, Elias, Thorne, Davies, Silas, or Finch to refer to ANYTHING. If you already have, switch it and do not continue using the name.
 * **YOU SHOULD NOT BE WRITING A STORY, JUST A PLOT FOR A STORY.**
 
 Now generate the 15 plot beats for the following input:
@@ -237,6 +239,7 @@ The story should be fiction but plausible—no creepy monsters, fantasy creature
 Do not stray too far from the original theme.
 It should be in the first person perspective.
 If the story begins to sound abstract, supernatural, or like science fiction, IMMEDIATELY course-correct by returning to concrete actions, dialogue, or physical investigation.
+Never EVER use the names Blackwood, Elias, Thorne, Davies, Silas, or Finch to refer to ANYTHING. If you already have, switch it and do not continue using the name.
 
 """
 
