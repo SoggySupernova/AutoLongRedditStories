@@ -54,8 +54,8 @@ def get_last_paragraph(text):
 
 
 
-hook_sentence = "My dad keeps insisting we’ve already had this exact day before."
-theme_sentence = "The narrator eventually learns their father has been unknowingly participating in a memory study that manipulates participants’ sense of time and repetition."
+hook_sentence = "My neighbor knocked at midnight and said, ‘If anyone asks, you didn’t see my basement tonight.’"
+theme_sentence = "The narrator later realizes several houses on the street share interconnected crawlspaces, and something illegal has been moving through them for years."
 
 
 # -------------------------------------------------------------------------------------
