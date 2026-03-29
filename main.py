@@ -93,7 +93,7 @@ def split_into_groups(text, min_words=10):
     words, and no group is longer than necessary.
     """
     # Basic sentence splitting (., ?, ! followed by whitespace)
-    sentences = re.split(r'(?<!\bDr\.)(?<!\bMr\.)(?<!\bMs\.)(?<!\bMrs\.)(?<!\bProf\.)(?<=[.!?])\s+', text.strip())
+    sentences = re.split(r'(?<!\bDr\.)(?<!\bMr\.)(?<!\bMs\.)(?<!\bMrs\.)(?<!\bProf\.)(?<!\bSt\.)(?<=[.!?])\s+',text.strip())
     # Experimental regex
 
     groups = []
@@ -267,21 +267,61 @@ print("")
 import subprocess
 import random
 
-# Random start time between 0 and 30 minutes (in seconds)
+
+
+
 start_time = random.randint(0, 1800)
 
+# Step 1a: Create a concat list file
+with open("temp/concat_list.txt", "w") as f:
+    for _ in range(3):
+        f.write("file '../input/source.mkv'\n")
+
+# Step 1b: Loop by concatenating at the demuxer level (no re-encode)
+subprocess.run([
+    "ffmpeg",
+    "-f", "concat",
+    "-safe", "0",
+    "-i", "temp/concat_list.txt",
+    "-c", "copy",
+    "-y",
+    "temp/looped_video.mp4"
+], check=True)
+
+# Step 2: Trim the looped video to the random start time (keyframe-aligned, no re-encode)
 subprocess.run([
     "ffmpeg",
     "-ss", str(start_time),
-    "-stream_loop", "-1",
-    "-i", "input/source.mkv",
+    "-i", "temp/looped_video.mp4",
+    "-c:v", "copy",
+    "-c:a", "copy",
+    "-y",
+    "temp/trimmed_video.mp4"
+], check=True)
+
+# Step 3: Combine trimmed video with audio
+subprocess.run([
+    "ffmpeg",
+    "-i", "temp/trimmed_video.mp4",
     "-i", "temp/spedup.wav",
+    "-map", "0:v",
+    "-map", "1:a",
     "-c:v", "copy",
     "-c:a", "aac",
     "-shortest",
     "-y",
     "temp/audio_added.mp4"
-])
+], check=True)
+
+
+
+
+
+
+
+
+
+
 
 # add captions to the video
 print("")
