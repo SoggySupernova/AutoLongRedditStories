@@ -9,7 +9,7 @@ Automate those annoying AI-narrated Reddit stories with minecraft parkour in the
 - automatically detect font name from file ✅
 - some sort of welcome screen with a "generate topics or I already have an idea" choices
 - fix tts getting cut off in the middle of "Dr. *" ✅
-- randomize video start point
+- randomize video start point ✅
 - easy install script
 - thumbnail generator!
 - shorts generator!
